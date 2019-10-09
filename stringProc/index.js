@@ -5,7 +5,7 @@ function stringProcessor () {
     };
 
     function iter() {
-        for (let i = 0; i < initialArr.length; i++) {
+        for (let i = 0; i < initialArr.length - 1; i++) {
             if (anti[initialArr[i]] === initialArr[i + 1]) {
                 initialArr.splice(i, 2);
                 return true;

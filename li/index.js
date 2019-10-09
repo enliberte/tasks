@@ -1,27 +1,36 @@
 function colorize(event) {
     const rootElem = this;
-    const targetElem = event.target;
-    processNode(rootElem);
 
     function addColor(node) {
-        if (node !== rootElem) {
-            node.classList.add('active');
-            const parentElem = node.parentElement;
-            if (parentElem) {
-                addColor(parentElem);
+        node.classList.add('active');
+    }
+
+    function addColorToParent(node) {
+        if (node === rootElem) return;
+        addColor(node);
+        const siblings = node.parentElement.children;
+        for (let sibling of siblings) {
+            if (sibling !== node) {
+                removeColor(sibling);
+                removeColorOfChildren(sibling);
             }
+        }
+        addColorToParent(node.parentElement);
+    }
+
+    function removeColor(node) {
+        node.classList.remove('active');
+    }
+
+    function removeColorOfChildren(node) {
+        for (let child of node.children) {
+            removeColor(child);
+            removeColorOfChildren(child);
         }
     }
 
-    function processNode(node) {
-        node.classList.remove('active');
-        for (let child of node.children) {
-            processNode(child);
-            if (child === targetElem) {
-                addColor(child);
-            }
-        }
-    }
+    removeColorOfChildren(event.target);
+    addColorToParent(event.target);
 }
 
 document.getElementById('ul1').addEventListener('click', colorize);
